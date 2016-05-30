@@ -31,7 +31,6 @@ long previousButtonMillis=0;
 
 bool first=false;
 bool first2=false;
-bool first3=false;
 
 void setup() {
   pinMode(redPin, OUTPUT);
@@ -47,37 +46,36 @@ void setup() {
 
 void loop() {
    currentMillis = millis();
-   //buttonState=digitalRead(buttonPin);
    readButton();
-   if (buttonState==LOW&&currentMillis-previousButtonMillis<8000)//button pressed
-  {
-   testState=HIGH;
-//   updateState(redPin,redPinState,previousRedMillis,2000,6000);
-//   updateState(greenPin,greenPinState,previousGreenMillis,5000,2000);
-//   updateState(yellowPin,yellowPinState,previousYellowMillis,1000,7000);
-//   updateState(redPin2,red2PinState,previousRed2Millis,6000,2000);
-//   updateState(greenPin2,green2PinState,previousGreen2Millis,1000,7000);
-//   if (first3==false)
-//   updateState(yellowPin2,yellow2PinState,previousYellow2Millis,1000,1000);
-//   else
-//   updateState(yellowPin2,yellow2PinState,previousYellow2Millis,1000,5000);
-   }
-   else//button state not pressed so HIGH
+   if (buttonState==LOW)
    {
-   testState=LOW;
+   updateState(greenPin,greenPinState,previousGreenMillis,3000,3000);
+   updateState(redPin,redPinState,previousRedMillis,2000,6000);
+   updateState(yellowPin,yellowPinState,previousYellowMillis,1000,5000);
+   
+   updateState(redPin2,red2PinState,previousRed2Millis,4000,2000);
+   if (currentMillis-previousButtonMillis<2000)
+   {
+   updateState(greenPin2,green2PinState,previousGreen2Millis,1000,3000);
+   updateState(yellowPin2,yellow2PinState,previousYellow2Millis,1000,2000);
+   }
+   }
+   else 
+   {
    updateState(redPin,redPinState,previousRedMillis,4000,4000);
    if (first==false)
    updateState(greenPin,greenPinState,previousGreenMillis,3000,4000);
    else
    updateState(greenPin,greenPinState,previousGreenMillis,3000,5000);
    updateState(yellowPin,yellowPinState,previousYellowMillis,1000,7000);
+   }
    updateState(redPin2,red2PinState,previousRed2Millis,4000,4000);
    updateState(greenPin2,green2PinState,previousGreen2Millis,3000,5000);
    if (first2==false)
    updateState(yellowPin2,yellow2PinState,previousYellow2Millis,1000,3000);
    else
    updateState(yellowPin2,yellow2PinState,previousYellow2Millis,1000,7000);
-   }
+   
    switchLeds();
 }
 
@@ -90,8 +88,6 @@ void updateState(int pin, byte &state, long &previousMillis, int intervalOn, int
       if (pin==6)
       {
       first2=true;
-      if (buttonState==LOW)
-      first3=true;
       }
       previousMillis += intervalOff;
     }
@@ -117,10 +113,13 @@ void switchLeds() {
 void readButton() {
    if (digitalRead(buttonPin) == LOW) {
      buttonState = LOW; 
+   first=false;
+   first2=false;
      previousButtonMillis=currentMillis;
    }
-   if (currentMillis-previousButtonMillis>=8000)
+   if (buttonState==LOW&&currentMillis-previousButtonMillis>=5000)
    {
    buttonState=HIGH;
    }
  }
+
