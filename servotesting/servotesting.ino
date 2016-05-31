@@ -17,8 +17,8 @@ int greenPin = 8;
 int redPin2 = 7;
 int yellowPin2 = 6;
 int greenPin2 = 5;
-
-int buttonPin=1;
+int pedestrianPin=1;
+int buttonPin=3;
 
 byte redPinState = HIGH; 
 byte yellowPinState = LOW; 
@@ -26,7 +26,7 @@ byte greenPinState = LOW;
 byte red2PinState = LOW; 
 byte yellow2PinState = LOW; 
 byte green2PinState = HIGH; 
-int testState=LOW;
+byte pedestrianPinState=HIGH;
  
 int buttonState=0;
 
@@ -38,6 +38,7 @@ long previousGreenMillis=0;
 long previousRed2Millis=0;
 long previousYellow2Millis=0;
 long previousGreen2Millis=0;
+long previousPedestrianMillis=0;
 
 long previousButtonMillis=0;
 
@@ -51,21 +52,25 @@ void setup() {
   pinMode(redPin2, OUTPUT);
   pinMode(yellowPin2, OUTPUT);
   pinMode(greenPin2, OUTPUT);
+  pinMode(pedestrianPin, OUTPUT);
   pinMode(buttonPin,INPUT);
   buttonState=HIGH;
   myservo.write(servoPosition);
-  myservo.attach(2);
+  myservo.attach(0);
 }
 
 void loop() {
    currentMillis = millis();
-   readButton();
+   if (greenPinState==LOW&&yellowPinState==LOW&&yellow2PinState==LOW&&red2PinState==LOW){
+   readButton();}
    servo();
    if (buttonState==LOW)
    {
    updateState(greenPin,greenPinState,previousGreenMillis,3000,3000);
    updateState(redPin,redPinState,previousRedMillis,2000,6000);
    updateState(yellowPin,yellowPinState,previousYellowMillis,1000,5000);
+   
+   updateState(pedestrianPin,pedestrianPinState,previousPedestrianMillis,2000,6000);
    
    updateState(redPin2,red2PinState,previousRed2Millis,4000,2000);
    if (currentMillis-previousButtonMillis<2000)
@@ -82,13 +87,22 @@ void loop() {
    else
    updateState(greenPin,greenPinState,previousGreenMillis,3000,5000);
    updateState(yellowPin,yellowPinState,previousYellowMillis,1000,7000);
+  
+   if (yellowPinState==HIGH)
+   updateState(pedestrianPin,pedestrianPinState,previousPedestrianMillis,100,100);
+   else
+   updateState(pedestrianPin,pedestrianPinState,previousPedestrianMillis,4000,4000);
+  
    }
+   
+   //idk why this chunk of code is outside the "else" but it only works if it is
    updateState(redPin2,red2PinState,previousRed2Millis,4000,4000);
    updateState(greenPin2,green2PinState,previousGreen2Millis,3000,5000);
    if (first2==false)
    updateState(yellowPin2,yellow2PinState,previousYellow2Millis,1000,3000);
    else
    updateState(yellowPin2,yellow2PinState,previousYellow2Millis,1000,7000);
+   //end code chunk
    
    switchLeds();
 }
@@ -121,6 +135,7 @@ void switchLeds() {
  digitalWrite(redPin2, red2PinState);
  digitalWrite(greenPin2, green2PinState);
  digitalWrite(yellowPin2, yellow2PinState);
+ digitalWrite(pedestrianPin, pedestrianPinState);
 }
 
 void readButton() {
