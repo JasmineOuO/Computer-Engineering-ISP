@@ -1,6 +1,4 @@
   /* Programmed by: Jackie Nguyen, Jasmine Ou and Laura Wong
-     Teacher: Mr. Wong
-     Date: Friday June 10, 2016
      Description: This program controls a T-intersection including the timing of the three traffic lights,
      the pedestrian lights, the pedestrian button, the LDR sensor to turn on the bright light of the lamp
      and an IR sensor to open and close the gates.
