@@ -4,4 +4,4 @@ A miniature model of a T-intersection traffic light system was built using foam 
 
 Here is an image of a working prototype of the traffic light system: 
 
-<img src= "images/traffic-light%20prototype.png" width="700" align="middle">
+<img src= "images/prototype%20image.png" width="700" align="middle">
